@@ -20,7 +20,7 @@ const checkers: any = {
     const reference = c.request.body.reference;
 
     // Example only!
-    if (reference.hello !== "world") {
+    if (!reference.token) {
       return { entitled: false };
     }
 
@@ -35,7 +35,7 @@ const checkers: any = {
     const reference = c.request.body.reference;
 
     // Example only!
-    if (reference.hello !== "world") {
+    if (!reference.token) {
       return { entitled: false };
     }
 
@@ -51,8 +51,11 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
   const attributeSetType = c.request.body.attributeSetType;
   const token = c.request.body.reference.token;
 
-  console.log("************************************** Token*********************************",token,c.request.body.reference)
-
+  console.log(
+    "************************************** Token*********************************",
+    token,
+    c.request.body.reference
+  );
 
   const checker = checkers[attributeSetType];
   if (!checker) {
@@ -66,14 +69,16 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
   }
   const ticketType = attributeSetType.substring(attributeSetType.indexOf("#") + 1);
   try {
-    if(!token) throw Error('No review token found')
-    const tokenResponse = await axios.request({ url: `${process.env.BECKN_URL}/api/token/validate`, method: 'POST',data:{token} })
+    if (!token) throw Error("No review token found");
+    const tokenResponse = await axios.request({
+      url: `${process.env.BECKN_URL}/api/token/validate`,
+      method: "POST",
+      data: { token },
+    });
 
-    if(tokenResponse.status !== 200){
-      throw Error('Invalid token')
+    if (tokenResponse.status !== 200) {
+      throw Error("Invalid token");
     }
-
-
 
     const unsignedTicket: T.Components.Schemas.VerifiableCredentialWithoutProof = {
       "@context": [
