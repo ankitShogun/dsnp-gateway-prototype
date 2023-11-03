@@ -71,7 +71,7 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
   try {
     if (!token) throw Error("No review token found");
     const tokenResponse = await axios.request({
-      url: `${process.env.BECKN_URL}/api/token/validate`,
+      url: "https://dsnp-dev.becknprotocol.io/api/token/validate",
       method: "POST",
       data: { token },
     });
