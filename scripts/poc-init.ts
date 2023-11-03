@@ -50,8 +50,7 @@ export const newVerifiableCredential = async () => {
                 },
                 reference: {
                   type: "object",
-                  properties: {
-                  },
+                  properties: {},
                 },
               },
               required: ["interactionId", "href", "reference"],
@@ -66,7 +65,10 @@ export const newVerifiableCredential = async () => {
             },
           },
           trust: {
-            oneOf: ["dsnp://" + process.env.PROVIDER_ID + "#OndcVerifiedBuyerPlatform", "dsnp://" + process.env.PROVIDER_ID + "#OndcVerifiedSellerPlatform"],
+            oneOf: [
+              "dsnp://" + process.env.PROVIDER_ID + "#OndcVerifiedBuyerPlatform",
+              "dsnp://" + process.env.PROVIDER_ID + "#OndcVerifiedSellerPlatform",
+            ],
           },
         },
       },
@@ -113,7 +115,7 @@ const interactionVC: T.Components.Schemas.VerifiableCredentialWithEd25519Proof =
   credentialSubject: {
     interactionId: "zH47VxQmaLFN2Kk7KowLvQYhHooqbyYLw7WuyfxBNC75x7Dqr",
     href: "https://www.etsy.com/listing/1292521772/melting-clock-salvador-dali-the",
-    reference: { hello: "world" },
+    reference: { token: "1234" },
   },
   proof: {
     type: "Ed25519Signature2020",
