@@ -2,6 +2,7 @@ import { Context, Handler } from "openapi-backend";
 import type * as T from "../types/openapi.js";
 import { Keyring } from "@polkadot/api";
 import { signedCopyOf } from "../services/vc.js";
+import axios from "axios";
 import type { KeyringPair } from "@polkadot/keyring/types.js";
 
 export type CheckerOutput = {
@@ -47,8 +48,12 @@ const checkers: any = {
 };
 
 export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> = async (c, req, res) => {
-  console.log(c.request.body);
   const attributeSetType = c.request.body.attributeSetType;
+  const token = c.request.body.reference.token;
+
+  console.log("************************************** Token*********************************",token,c.request.body.reference)
+
+
   const checker = checkers[attributeSetType];
   if (!checker) {
     // No entitlement checker for attributeSetType
@@ -61,6 +66,15 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
   }
   const ticketType = attributeSetType.substring(attributeSetType.indexOf("#") + 1);
   try {
+    if(!token) throw Error('No review token found')
+    const tokenResponse = await axios.request({ url: `${process.env.BECKN_URL}/api/token/validate`, method: 'POST',data:{token} })
+
+    if(tokenResponse.status !== 200){
+      throw Error('Invalid token')
+    }
+
+
+
     const unsignedTicket: T.Components.Schemas.VerifiableCredentialWithoutProof = {
       "@context": [
         "https://www.w3.org/2018/credentials/v1",
