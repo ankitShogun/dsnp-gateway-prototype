@@ -179,7 +179,6 @@ export const verify = async (
   }
   // proof.verificationMethod should start with issuer User URI + "#"
   if (!credential.proof.verificationMethod.startsWith(credential.issuer + "#")) {
-    console.log("proof must be from issuer");
     return false;
   }
   const dsnpUserId = Number(credential.issuer.substring("dsnp://".length));
