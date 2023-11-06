@@ -185,7 +185,6 @@ export const verify = async (
   const dsnpUserId = Number(credential.issuer.substring("dsnp://".length));
   const keyId = Number(credential.proof.verificationMethod.substring(credential.issuer.length + 1));
   if (!(Number.isInteger(keyId) && keyId >= 0)) {
-    console.log("keyId must be an unsigned integer");
     return false;
   }
 
