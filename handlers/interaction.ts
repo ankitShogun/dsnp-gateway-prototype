@@ -12,7 +12,7 @@ export type CheckerOutput = {
   href: string;
 };
 
-const dsnpRetailUrl = "https://dsnp-stage.becknprotocol.io";
+const dsnpRetailUrl = "https://dsnp.becknprotocol.io";
 
 type EntitlementChecker = (c: Context) => CheckerOutput;
 
