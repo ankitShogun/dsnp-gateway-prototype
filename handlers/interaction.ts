@@ -12,6 +12,8 @@ export type CheckerOutput = {
   href: string;
 };
 
+const dsnpRetailUrl = "https://dsnp-dev.becknprotocol.io";
+
 type EntitlementChecker = (c: Context) => CheckerOutput;
 
 const checkers: any = {
@@ -71,7 +73,7 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
   try {
     if (!token) throw Error("No review token found");
     const tokenResponse = await axios.request({
-      url: "https://dsnp-dev.becknprotocol.io/api/token/validate",
+      url: `${dsnpRetailUrl}/api/token/validate`,
       method: "POST",
       data: { token },
     });
