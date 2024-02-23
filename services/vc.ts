@@ -110,7 +110,7 @@ export const documentLoader = extendContextLoader(async (url: string) => {
                 properties: {
                   interactionId: { type: "string" },
                   href: { type: "string" },
-                  reference: { type: "object", properties: { token: { type: "string" } } },
+                  reference: { type: "object", properties: { orderDetails: { type: "string" } } },
                 },
                 required: ["interactionId", "href", "reference"],
               },

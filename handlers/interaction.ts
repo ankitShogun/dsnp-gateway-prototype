@@ -13,6 +13,7 @@ export type CheckerOutput = {
 };
 
 const dsnpRetailUrl = "https://dsnp.becknprotocol.io";
+const bapClientLayerUrl = "https://api-node.mobilityreferencebap.becknprotocol.io";
 
 type EntitlementChecker = (c: Context) => CheckerOutput;
 
@@ -22,7 +23,7 @@ const checkers: any = {
     const reference = c.request.body.reference;
 
     // Example only!
-    if (!reference.token) {
+    if (!reference.orderDetails) {
       return { entitled: false };
     }
 
@@ -37,7 +38,7 @@ const checkers: any = {
     const reference = c.request.body.reference;
 
     // Example only!
-    if (!reference.token) {
+    if (!reference.orderDetails) {
       return { entitled: false };
     }
 
@@ -51,13 +52,13 @@ const checkers: any = {
 
 export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> = async (c, req, res) => {
   const attributeSetType = c.request.body.attributeSetType;
-  const token = c.request.body.reference.token;
+  const orderDetails = JSON.parse(c.request.body.reference.orderDetails);
 
-  console.log(
-    "************************************** Token*********************************",
-    token,
-    c.request.body.reference
-  );
+  // console.log(
+  //   "************************************** Token*********************************",
+  //   orderDetails,
+  //   c.request.body.reference
+  // );
 
   const checker = checkers[attributeSetType];
   if (!checker) {
@@ -71,15 +72,15 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
   }
   const ticketType = attributeSetType.substring(attributeSetType.indexOf("#") + 1);
   try {
-    if (!token) throw Error("No review token found");
-    const tokenResponse = await axios.request({
-      url: `${dsnpRetailUrl}/api/token/validate`,
+    if (!orderDetails) throw Error("No order details found");
+    const statusResponse = await axios.request({
+      url: `${bapClientLayerUrl}/client/v2/status`,
       method: "POST",
-      data: { token },
+      data: orderDetails,
     });
 
-    if (tokenResponse.status !== 200) {
-      throw Error("Invalid token");
+    if (!(statusResponse.status === 200 || statusResponse.status === 201)) {
+      throw Error("Invalid order");
     }
 
     const unsignedTicket: T.Components.Schemas.VerifiableCredentialWithoutProof = {
@@ -99,7 +100,7 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
       credentialSubject: {
         interactionId: c.request.body.interactionId,
         href: checkerOutput.href,
-        reference: c.request.body.reference,
+        // reference: c.request.body.reference,
       },
     };
 
@@ -114,8 +115,6 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
       signingKeys,
       "dsnp://" + process.env.PROVIDER_ID + "#" + process.env.PROVIDER_CREDENTIAL_SIGNING_KEY_ID
     );
-
-    console.log(signedTicket);
 
     const response: T.Paths.SubmitInteraction.Responses.$200 = {
       attributeSetType: c.request.body.attributeSetType,

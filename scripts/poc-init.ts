@@ -115,7 +115,11 @@ const interactionVC: T.Components.Schemas.VerifiableCredentialWithEd25519Proof =
   credentialSubject: {
     interactionId: "zH47VxQmaLFN2Kk7KowLvQYhHooqbyYLw7WuyfxBNC75x7Dqr",
     href: "https://www.etsy.com/listing/1292521772/melting-clock-salvador-dali-the",
-    reference: { token: "1234" },
+    reference: {
+      orderDetails:
+        '{\n    "statusRequestDto": [\n        {\n            "context": {\n                "transaction_id": "c06cbc03-babc-425b-b4c1-9088ebfb9e90",\n                "bpp_id": "retail-bpp-infra2.becknprotocol.io",\n                "bpp_uri": "https://retail-bpp-infra2.becknprotocol.io//boc/bpp",\n                "domain": "retail"\n            },\n            "message": {\n                "order_id": "./retail.kirana/ind.blr/627@retail-bpp-infra2.becknprotocol.io.order"\n            }\n        }\n    ]\n}',
+    },
+    // reference: { token: "1234" },
   },
   proof: {
     type: "Ed25519Signature2020",

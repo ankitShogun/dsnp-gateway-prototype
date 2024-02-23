@@ -62,6 +62,7 @@ api.registerSecurityHandler("tokenAuth", async (c) => {
   if (typeof c.request.headers.authorization !== "string") return false;
   const token = c.request.headers.authorization.split(" ")[1];
   const account = await getAccountFromAuth(token);
+  console.log("Dank double lol", token, account);
 
   if (account === null) return false;
 
