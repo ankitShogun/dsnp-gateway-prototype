@@ -13,7 +13,7 @@ export type CheckerOutput = {
 };
 
 const dsnpRetailUrl = "https://dsnp.becknprotocol.io";
-const bapClientLayerUrl = "https://api-node.mobilityreferencebap.becknprotocol.io";
+const bapClientLayerUrl = "https://bap-gcl-dev.becknprotocol.io";
 
 type EntitlementChecker = (c: Context) => CheckerOutput;
 
@@ -74,7 +74,7 @@ export const submitInteraction: Handler<T.Paths.SubmitInteraction.RequestBody> =
   try {
     if (!orderDetails) throw Error("No order details found");
     const statusResponse = await axios.request({
-      url: `${bapClientLayerUrl}/client/v2/status`,
+      url: `${bapClientLayerUrl}/status`,
       method: "POST",
       data: orderDetails,
     });
