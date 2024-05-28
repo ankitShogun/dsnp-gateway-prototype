@@ -13,7 +13,7 @@ export type CheckerOutput = {
 };
 
 const dsnpRetailUrl = "https://dsnp.becknprotocol.io";
-const bapClientLayerUrl = "https://bap-gcl-dev.becknprotocol.io";
+const bapClientLayerUrl = "https://bap-gcl-prod.becknprotocol.io";
 
 type EntitlementChecker = (c: Context) => CheckerOutput;
 
